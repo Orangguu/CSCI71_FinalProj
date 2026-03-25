@@ -1,8 +1,5 @@
-# HI JOSIP! JUST NEED TO CLEAN UP AND FIX THE PRINT STATEMENTS,
-# ESPECIALLY IF IT RETURNS FALSE...
 # TO RUN: python FinalProjWarainSagusay.py
 # Then input something like: !<>!
-
 
 # initializing the stack and state
 stack = []
@@ -10,8 +7,6 @@ stack.append("Z")
 
 # Still have to implement reading a file
 s = input()
-
-
 
 def is_balanced():
     str_index = 0 # input pointer
@@ -29,8 +24,8 @@ def is_balanced():
     }
 
     print(f"Processing {s}")
+    
     for i in s:
-
         print(f"ID: ({state}, {s[str_index:]}, {"".join(reversed(stack))})")
 
         # Checks if the string starts with a !
@@ -46,13 +41,13 @@ def is_balanced():
             
         elif state == "q1":
             if i == "!":
-                if stack[-1] != "!":
+                if stack[-1] == "!":
+                    stack.pop()
+                    state = "q2"
+                else:
                     print(f"Invalid string. Failed at position {str_index}.")
                     print(f"Remaining unprocessed input string: {s[str_index:]}")
                     return False
-                else:
-                    stack.pop()
-                    state = "q2"
             elif i in pairs.keys():
                 stack.append(i)
             elif i in pairs.values():
@@ -62,6 +57,7 @@ def is_balanced():
                     return False
                 stack.pop()
             elif i == "x":
+                str_index+= 1
                 continue
             else:
                 print(f"Invalid string. Failed at position {str_index}.")
@@ -88,6 +84,7 @@ def is_balanced():
             print(f"Invalid string. Failed at position {str_index}.")
             print(f"Remaining unprocessed input string: {s[str_index:]}")
             return False
+        
     else:
         print(f"ID: ({state}, {s[str_index:]}, {"".join(reversed(stack))})")
         print(f"{state} is not a final state.")
