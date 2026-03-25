@@ -5,9 +5,6 @@
 stack = []
 stack.append("Z")
 
-# Still have to implement reading a file
-s = input()
-
 def is_balanced():
     str_index = 0 # input pointer
     state = "q0" # initial state
@@ -90,5 +87,45 @@ def is_balanced():
         print(f"{state} is not a final state.")
         return False
 
+   
+def evaluate():
+    # Remove the surrounding '!'
+    to_process = s[1:-1]
+    
+    stack = []  # Each element: (bracket_type, current_x_count)
+    current_count = 0
+
+    for ch in to_process:
+        if ch == 'x':
+            current_count += 1
+
+        elif ch in '<{[(':
+            # Push current context
+            stack.append((ch, current_count))
+            current_count = 0
+
+        elif ch in '>}] )':
+            # Pop previous context
+            open_bracket, prev_count = stack.pop()
+
+            # Apply operation
+            if open_bracket == '<':
+                current_count = 2 * current_count
+            elif open_bracket == '{':
+                current_count = current_count + 1
+            elif open_bracket == '[':
+                current_count = 0
+            elif open_bracket == '(':
+                current_count = max(current_count - 1, 0)
+
+            # Merge with previous level
+            current_count += prev_count
+
+    return current_count
+
 # Runs the program
-is_balanced()
+if __name__ == "__main__":
+    # Still have to implement reading a file
+    s = input()
+    is_balanced()
+    print(evaluate())
