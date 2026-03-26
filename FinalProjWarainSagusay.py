@@ -1,12 +1,14 @@
 # TO RUN: python FinalProjWarainSagusay.py
 # Then input something like: !<>!
 
-# initializing the stack and state
-stack = []
-stack.append("Z")
+def is_balanced(s, print_output=True):
 
-def is_balanced(s):
+    # Resetting/Initializing the stack and state
+    stack = []
+    stack.append("Z")
+
     str_index = 0 # input pointer
+    str_pos = 1 # input position
     state = "q0" # initial state
 
     #  Using a dictionary to map opening and closing symbols.
@@ -20,9 +22,14 @@ def is_balanced(s):
         "!": "!"
     }
 
-    print(f"Processing {s}")    
+    if(print_output):
+        print(f"Processing {s}")
+
     for i in s:
-        print(f"ID: ({state}, {s[str_index:]}, {"".join(reversed(stack))})")
+        str_pos = str_index + 1
+
+        if(print_output):
+            print(f"ID: ({state}, {s[str_index:]}, {"".join(reversed(stack))})")
 
         # Checks if the string starts with a !
         if state == "q0":
@@ -31,8 +38,9 @@ def is_balanced(s):
                 state = "q1"
             else:
                 # If string does not start with a "!", return false
-                print(f"Invalid string. Failed at position {str_index}.")
-                print(f"Remaining unprocessed input string: {s[str_index:]}")
+                if(print_output):
+                    print(f"Invalid string. Failed at position {str_pos}.")
+                    print(f"Remaining unprocessed input string: {s[str_index:]}")
                 return False 
             
         elif state == "q1":
@@ -45,52 +53,58 @@ def is_balanced(s):
                     else:
                         state = "q2"
                 else:
-                    print(f"Invalid string. Failed at position {str_index}.")
-                    print(f"Remaining unprocessed input string: {s[str_index:]}")
+                    if(print_output):
+                        print(f"Invalid string. Failed at position {str_pos}.")
+                        print(f"Remaining unprocessed input string: {s[str_index:]}")
                     return False
             elif i in pairs.keys():
                 stack.append(i)
             elif i in pairs.values():
                 if pairs[stack[-1]] != i:
-                    print(f"Invalid string. Failed at position {str_index}.")
-                    print(f"Remaining unprocessed input string: {s[str_index:]}")
+                    if(print_output):
+                        print(f"Invalid string. Failed at position {str_pos}.")
+                        print(f"Remaining unprocessed input string: {s[str_index:]}")
                     return False
                 stack.pop()
             elif i == "x":
                 str_index+= 1
                 continue
             else:
-                print(f"Invalid string. Failed at position {str_index}.")
-                print(f"Remaining unprocessed input string: {s[str_index:]}")
+                if(print_output):
+                    print(f"Invalid string. Failed at position {str_pos}.")
+                    print(f"Remaining unprocessed input string: {s[str_index:]}")
                 return False
 
         # If state q2 is entered early (symbols exist after the second "!"), return False
         elif state == "q3":
-            print(f"Invalid string. Failed at position {str_index}.")
-            print(f"Remaining unprocessed input string: {s[str_index:]}")
+            if(print_output):
+                print(f"Invalid string. Failed at position {str_pos}.")
+                print(f"Remaining unprocessed input string: {s[str_index:]}")
             return False
 
-        str_index+= 1
+        str_index += 1
 
     # Checks if the final state is q2
     if state == "q2":
         # If stack only has "Z" and the string is empty, return true. Return false if otherwise
         if stack == ["Z"] and s[str_index:] == "":
-            print(f"ID: ({state}, E, {"".join(reversed(stack))})")
-            print(f"{state} is a final state.")
-            print(f"{s} is valid and has balanced brackets.")
+            if(print_output):
+                print(f"ID: ({state}, E, {"".join(reversed(stack))})")
+                print(f"{state} is a final state.")
+                print(f"{s} is valid and has balanced brackets.")
             return True
         else:
-            print(f"ID: ({state}, {s[str_index:]}, {"".join(reversed(stack))})")
-            print(f"Invalid string. Failed at position {str_index}.")
-            print(f"Remaining unprocessed input string: {s[str_index:]}")
+            if(print_output):
+                print(f"ID: ({state}, {s[str_index:]}, {"".join(reversed(stack))})")
+                print(f"Invalid string. Failed at position {str_pos}.")
+                print(f"Remaining unprocessed input string: {s[str_index:]}")
             return False
         
     else:
-        print(f"ID: ({state}, E, {"".join(reversed(stack))})")
-        print(f"Invalid string, {state} is not a final state.")
+        if(print_output):
+            print(f"ID: ({state}, E, {"".join(reversed(stack))})")
+            print(f"Invalid string, {state} is not a final state.")
         return False
-
    
 def evaluate(s):
     # Remove the surrounding '!'
@@ -134,6 +148,7 @@ def main1():
             if s == "":
                 continue
             is_balanced(s)
+            print()
 
 
 def main2():
@@ -143,7 +158,7 @@ def main2():
             if s == "":
                 continue
 
-            if is_balanced(s):
+            if is_balanced(s, False):
                 result = evaluate(s)
                 print(f"{s} - Resulting number of x's: {result}")
             else:
