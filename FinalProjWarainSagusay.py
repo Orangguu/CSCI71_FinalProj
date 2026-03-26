@@ -5,7 +5,7 @@
 stack = []
 stack.append("Z")
 
-def is_balanced():
+def is_balanced(s):
     str_index = 0 # input pointer
     state = "q0" # initial state
 
@@ -88,14 +88,14 @@ def is_balanced():
         return False
 
    
-def evaluate():
+def evaluate(s):
     # Remove the surrounding '!'
-    to_process = s[1:-1]
+    s = s[1:-1]
     
     stack = []  # Each element: (bracket_type, current_x_count)
     current_count = 0
 
-    for ch in to_process:
+    for ch in s:
         if ch == 'x':
             current_count += 1
 
@@ -123,9 +123,29 @@ def evaluate():
 
     return current_count
 
+def main1():
+    with open("input.txt", "r") as file:
+        for line in file:
+            s = line.strip()
+            if s == "":
+                continue
+            is_balanced(s)
+
+
+def main2():
+    with open("input.txt", "r") as file:
+        for line in file:
+            s = line.strip()
+            if s == "":
+                continue
+
+            if is_balanced(s, verbose=False):
+                result = evaluate(s)
+                print(f"{s} - Resulting number of x's: {result}")
+            else:
+                print(f"{s} - Invalid string.")
+
 # Runs the program
 if __name__ == "__main__":
-    # Still have to implement reading a file
-    s = input()
-    is_balanced()
-    print(evaluate())
+    main1()
+    main2()
